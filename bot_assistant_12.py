@@ -1,8 +1,16 @@
-import sys
 from collections import UserDict
 from datetime import datetime
+from pickle import load, dump
+from pathlib import Path
 
 class AddressBook(UserDict):
+    def __init__(self):
+        super().__init__()
+        filename = 'address_book.bin'
+        if Path(filename).exists():
+            with open(filename, 'rb') as file:
+                self.data = load(file)
+
     def add_record(self, Record):
         self.data[Record.name.value] = Record
 
@@ -288,6 +296,11 @@ def greeting():
 def end():
     return 'Good bye!'
 
+def write_file():
+    filename = 'address_book.bin'
+    with open(filename, 'wb') as file:
+        dump(address_book.data, file)
+
 def main():
     """
     This function implements all the logic of interaction with the user, all 'print' and 'input' takes place here
@@ -316,7 +329,8 @@ def main():
             output = handler_commands[user_input.lower()]()
             print(output)
             if output == 'Good bye!':
-                sys.exit()
+                write_file()
+                exit()
         else:
             command, args = parse(user_input.lower())
             if command in handler_commands.keys():
