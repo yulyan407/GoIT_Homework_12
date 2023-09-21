@@ -279,7 +279,7 @@ def search_contact(pattern):
     """
     result = dict()
     for name, record in address_book.data.items():
-        if name.find(pattern) != -1:
+        if name.lower().find(pattern.lower()) != -1:
             result[name] = record
         elif record.phones:
             for phone in record.phones:
